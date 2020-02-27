@@ -163,26 +163,10 @@ app.get('/items/country/:country', (req, res) => {
     }
 })
   
-app.get('/users/:userId', passport.authenticate('basic', { session: false }), (req, res) => {
-    const resultUser = users.find(i => {
-        if (i.id == req.params.userId) {
-            return 1;
-        }
-    });
-    if(req.user.id == req.params.userId)
-    {
-        if(resultUser === undefined)
-        {
-            res.send('User not found.')
-        }
-        else
-        {
-            res.json(resultUser);
-        }
-    }
-    else {
-        res.send('You can\'t see this profile.');
-    }
+app.get('/userinfo', passport.authenticate('basic', { session: false }), (req, res) => {
+
+            res.json(req.user);
+
 })
 
 app.get('/items/:itemId', (req, res) => {
@@ -247,14 +231,13 @@ app.post('/user',
         return res.status(201).json(newUser);
 });
 
-app.post('/user/:userId/item',
+app.post('/item',
     [
         validateJSONHeaders,
         validateNewItem
     ],
     passport.authenticate('basic', { session: false }), (req, res) => {
-    if(req.user.id == req.params.userId)
-    {
+   
         let newItem = {
             "id": items.length + 1,
             "title": req.body.title,
@@ -273,10 +256,7 @@ app.post('/user/:userId/item',
         items.push(newItem);
 
         return res.status(201).json(newItem);
-    }
-    else{
-        res.send('You can just post an item with your user ID.');
-    }
+
 });
   
 function verifId(userId){
