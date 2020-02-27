@@ -1,0 +1,48 @@
+test user Body :
+
+{
+"username": "test",   
+"password": "passwordtest" 
+"name": "Test test",
+"dateOfBirth": "1912-05-20",
+"address": "test Street 567",
+"city": "Test",
+"country": "Test",
+"email": "test.test@test.com"
+}
+
+test item body :
+
+{
+	"title": "Test",
+	"description": "test test test",
+	"category": "Test",
+	"image": "test.img",
+	"askingPrice": 10
+}
+
+GET :
+
+/users
+/items
+
+/users/:userId
+/items/:itemId
+
+/items/category/:category
+/items/title/:title
+/items/country/:country
+
+POST :
+
+/user
+/user/:userId/item
+
+DELETE :
+
+/user/:id
+/item/:id
+
+PUT : 
+
+/item/:Itemid
