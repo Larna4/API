@@ -190,18 +190,18 @@ app.put('/item/:Itemid', passport.authenticate('basic', { session: false }), (re
     if(req.user.name == UseritemName)
     {
         if(req.body.title != undefined)
-            items[req.params.Itemid].title = req.body.title;
+            items[req.params.Itemid-1].title = req.body.title;
         if(req.body.description != undefined)
-            items[req.params.Itemid].description = req.body.description;
+            items[req.params.Itemid-1].description = req.body.description;
         if(req.body.category != undefined)
-            items[req.params.Itemid].category = req.body.category;
+            items[req.params.Itemid-1].category = req.body.category;
         if(req.body.image != undefined)
-            items[req.params.Itemid].image = req.body.image;
+            items[req.params.Itemid-1].image = req.body.image;
         if(req.body.askingPrice != undefined)
-            items[req.params.Itemid].askingPrice = req.body.askingPrice;
+            items[req.params.Itemid-1].askingPrice = req.body.askingPrice;
         return res.status(201).json({
             message: 'Your item has been modified !',
-            item: items[req.params.Itemid]
+            item: items[req.params.Itemid-1]
         }); 
     }
     else{
@@ -215,20 +215,26 @@ app.post('/user',
       validateNewUser
     ],
     (req, res) => {
-        let newUser = {
-            "id": users.length + 1,
-            "username": req.body.username,
-            "password": req.body.password,
-            "name": req.body.name,
-            "dateOfBirth": req.body.dateOfBirth,
-            "address": req.body.address,
-            "city": req.body.city,
-            "country": req.body.country,
-            "email": req.body.email
+        if(req.body.username == undefined || req.body.password == undefined || req.body.name == undefined || req.body.dateOfBirth == undefined ||
+            req.body.address == undefined || req.body.city == undefined || req.body.country == undefined || req.body.email == undefined){
+            res.send('You have to fill in all the input fields');
         }
-        users.push(newUser);
+        else{
+            let newUser = {
+                "id": users.length + 1,
+                "username": req.body.username,
+                "password": req.body.password,
+                "name": req.body.name,
+                "dateOfBirth": req.body.dateOfBirth,
+                "address": req.body.address,
+                "city": req.body.city,
+                "country": req.body.country,
+                "email": req.body.email
+            }
+            users.push(newUser);
 
-        return res.status(201).json(newUser);
+            return res.status(201).json(newUser);
+        }
 });
 
 app.post('/item',
@@ -237,7 +243,11 @@ app.post('/item',
         validateNewItem
     ],
     passport.authenticate('basic', { session: false }), (req, res) => {
-   
+    if(req.body.title == undefined || req.body.description == undefined || req.body.category == undefined || req.body.image == undefined || req.body.askingPrice == undefined) {
+
+        res.send('You have to fill in all the input fields');
+    }
+    else{
         let newItem = {
             "id": items.length + 1,
             "title": req.body.title,
@@ -256,7 +266,7 @@ app.post('/item',
         items.push(newItem);
 
         return res.status(201).json(newItem);
-
+    }
 });
   
 function verifId(userId){
